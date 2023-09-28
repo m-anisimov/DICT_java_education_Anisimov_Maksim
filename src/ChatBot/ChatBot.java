@@ -25,5 +25,16 @@ public class ChatBot {
         for (int i=0;i<=userInp;i++){
             System.out.println(i+" !");
         }
+
+        System.out.println("What is two times two?\n" +
+                "1. 28 \n" +
+                "2. sqrt(PI) \n" +
+                "3. 4 \n" +
+                "4. 7/8.");
+        while (scn.nextInt()!=3){
+            System.out.println("Wrong");
+        }
+        System.out.println("Correct");
+        System.out.println("Goodbye, have a nice day!");
     }
 }
