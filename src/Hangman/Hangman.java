@@ -7,7 +7,7 @@ import static java.lang.Integer.parseInt;
 public class Hangman
 {
     public static Scanner scn = new Scanner(System.in);
-    static String answer;
+    static String answer="";
     static String[] s = {"python", "java", "javascript", "kotlin", "hindi", "sherlock", "morze", "binary"};
     static String[] s4 = {"python", "java", "javascript", "kotlin"};
     static  int right_answer;
@@ -16,30 +16,53 @@ public class Hangman
     {
         System.out.println("HANGMAN\n" + "The game will be available soon.\n");
 
-/*        System.out.println("---- Play #1 -----(stage 2)");
-        f_stage2 (scn.nextLine());
+        //main menu:
+        while(true)
+        {
+            System.out.print("Type \"play\" to play the game, \"exit\" to quit: >");
+            answer = scn.nextLine();
 
-        System.out.println("\n---- Play #2 -----(stage 3)");
-       f_stage3 ();
+            if (answer.equals("exit"))
+            {
+                System.out.println("See you soon...");
+                return;
+            }
+            if (answer.equals("play"))
+                break;
+        }
 
-        System.out.println("\n---- Play #3 -----(stage 4)");
-        f_stage4 ();
+        //submenu:
+        while(true) 
+        {
+            System.out.println("_".repeat(73));
+            System.out.print("Select the game number. Enter an integer between 1 to 6 or \"exit\" to quit: >");
+            answer = scn.nextLine();
 
-        System.out.println("\n---- Play #4 -----(stage 5)");
-        f_stage5 ();
+            if (answer.equals("exit"))
+            {
+                System.out.println("\nSee you soon...");
+                return;
+            }
 
-        System.out.println("\n---- Play #5 -----(stage 6)");
-        f_stage6 ();*/
-
-        System.out.println("\n---- Play #6 -----(stage 7)");
-        f_stage7 ();
+            switch (answer)
+            {
+                case "1" : f_stage2(); break;
+                case "2" : f_stage3(); break;
+                case "3" : f_stage4(); break;
+                case "4" : f_stage5(); break;
+                case "5" : f_stage6(); break;
+                case "6" : f_stage7(); break;
+            }
+        }
     }
-    public static void f_stage2(String s)
+    public static void f_stage2()
     {
+        System.out.println("\n---- Play #1 -----(stage 2)");
         System.out.print("HANGMAN\n" + "Guess the word: >");
-        System.out.println(s.equals("java") ? "You survived!" : "You lost!");
+        answer = scn.nextLine();
+        System.out.println(answer.equals("java") ? "You survived!" : "You lost!");
 
-        if (s.equals("java"))
+        if (answer.equals("java"))
             Hangman.f_draw(0) ;
         else
             Hangman.f_draw(8);
@@ -47,6 +70,7 @@ public class Hangman
     public static void f_stage3()
     {
         right_answer  = Hangman.f_random(8);
+        System.out.println("\n---- Play #2 -----(stage 3)");
         System.out.print("HANGMAN\n" + "Guess the word from the list: ");
 
         for (int i = 0; i < s.length; i++)
@@ -77,6 +101,7 @@ public class Hangman
     public static void f_stage4()
     {
         right_answer  = Hangman.f_random(8);
+        System.out.println("\n---- Play #3 -----(stage 4)");
         System.out.print("HANGMAN\n" + "Guess the word (from the list: ");
 
         for (int i = 0; i < s.length; i++)
@@ -84,7 +109,7 @@ public class Hangman
             System.out.print(s[i] + ( i < s.length-1 ? ", ":""));
         }
 
-        System.out.print(")\n(" + s[right_answer] + ") "
+        System.out.print(")\n"
                 + s[right_answer].substring(0,2)
                 + "-".repeat(s[right_answer].length()-2)
                 + " :> ");
@@ -105,13 +130,14 @@ public class Hangman
     }
     public static void f_stage5()
     {
-        right_answer = Hangman.f_random(4);
         int letter_num, len;
         String letter, answer_line, tmp_line;
+
+        right_answer = Hangman.f_random(4);
         len = s4[right_answer].length();
         answer_line = "-".repeat(len);
         tmp_line = answer_line;
-
+        System.out.println("\n---- Play #4 -----(stage 5)");
         System.out.println("HANGMAN\n");
 
         for(int j=0; j <8; j++)
@@ -147,18 +173,20 @@ public class Hangman
             }
         }
         System.out.println(answer_line);
-        System.out.println("Thanks for playing!\n" +
+        System.out.println("\nThanks for playing!\n" +
             "We'll see how well you did in the next stage");
     }
     public static void f_stage6()
     {
-        right_answer = Hangman.f_random(4);
         int letter_num, len;
         String letter, answer_line, tmp_line;
+
+        right_answer = Hangman.f_random(4);
         len = s4[right_answer].length();
         answer_line = "-".repeat(len);
         tmp_line = answer_line;
 
+        System.out.println("\n---- Play #5 -----(stage 6)");
         System.out.println("HANGMAN\n");
 
         for(int j=0; j <8; j++)
@@ -213,14 +241,15 @@ public class Hangman
     }
     public static void f_stage7()
     {
-        right_answer = Hangman.f_random(4);
         int len;
         String letter, answer_line, tmp_line, list_letters="";
 
+        right_answer = Hangman.f_random(4);
         len = s4[right_answer].length();
         answer_line = "-".repeat(len);
         tmp_line = answer_line;
 
+        System.out.println("\n---- Play #6 -----(stage 7)");
         System.out.println("HANGMAN\n");
 
         for(int j=0; j <8; j++)
