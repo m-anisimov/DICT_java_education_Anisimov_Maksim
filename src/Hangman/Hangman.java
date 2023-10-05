@@ -16,17 +16,20 @@ public class Hangman
     {
         System.out.println("HANGMAN\n" + "The game will be available soon.\n");
 
-        System.out.println("---- Play #1 -----(stage 2)");
-   //     f_stage2 (scn.nextLine());
+/*        System.out.println("---- Play #1 -----(stage 2)");
+        f_stage2 (scn.nextLine());
 
         System.out.println("\n---- Play #2 -----(stage 3)");
-   //     f_stage3 ();
+       f_stage3 ();
 
         System.out.println("\n---- Play #3 -----(stage 4)");
-   //     f_stage4 ();
+        f_stage4 ();
 
         System.out.println("\n---- Play #4 -----(stage 5)");
-        f_stage5 ();
+        f_stage5 ();*/
+
+        System.out.println("\n---- Play #5 -----(stage 6)");
+        f_stage6 ();
     }
     public static void f_stage2(String s)
     {
@@ -67,7 +70,6 @@ public class Hangman
             System.out.println("Your choice: \"" + s[parseInt (answer)-1] + "\", but right answer: \"" + s[right_answer] +"\"");
             Hangman.f_draw(8);
         }
-
     }
     public static void f_stage4()
     {
@@ -145,6 +147,68 @@ public class Hangman
         System.out.println(answer_line);
         System.out.println("Thanks for playing!\n" +
             "We'll see how well you did in the next stage");
+    }
+    public static void f_stage6()
+    {
+        right_answer = Hangman.f_random(4);
+        int letter_num, len;
+        String letter, answer_line, tmp_line;
+        char current_simbol;
+        len = s4[right_answer].length();
+        answer_line = "-".repeat(len);
+        tmp_line = answer_line;
+
+        System.out.println("HANGMAN\n");
+
+        for(int j=0; j <8; j++)
+        {
+            System.out.println(answer_line);
+            System.out.print("Input a letter:> ");
+            letter = scn.nextLine();
+            letter_num = s4[right_answer].indexOf(letter);
+
+            if (letter_num == -1)
+            {
+                System.out.println("That letter doesn't appear in the word\n");
+            }
+            else
+            {
+                if (answer_line.indexOf(letter)!=-1)
+                {
+                    System.out.println("No improvements\n");
+                }
+                else
+                {
+                    j--; //не учитываем попытку, т.к. игрок угадал букву, в т.ч. не угаданную в предыдущих попытках
+                    tmp_line = "";
+                    System.out.print("\n");
+
+                    for (int i = 0; i < len; i++)
+                    {
+                        if (s4[right_answer].charAt(i) == letter.charAt(0))
+                        {
+                            tmp_line = tmp_line + letter.charAt(0);
+                        }
+                        else
+                        {
+                            if (answer_line.charAt(i) == '-')
+                                tmp_line = tmp_line + "-";
+                            else
+                                tmp_line = tmp_line + answer_line.charAt(i);
+                        }
+                    }
+                    answer_line = tmp_line;
+                    if (answer_line.equals(s[right_answer]))
+                        j=10;
+                }
+            }
+        }
+        System.out.println(answer_line);
+        System.out.println(answer_line.equals(s[right_answer]) ? "You guessed the word!\nYou survived!" : "You lost!");
+        if (answer_line.equals(s[right_answer]))
+            Hangman.f_draw(0);
+        else
+            Hangman.f_draw(8);
     }
     public static void f_draw(int lost)
     {
