@@ -8,7 +8,7 @@ public class CoffeeMachine {
     public static Scanner scn = new Scanner(System.in);
     static String[] menu_main = {"buy", "fill", "take"};
     static String[] menu_coffee = {"espresso", "latte", "cappuccino"};
-    public static Resourсes remaining = new Resourсes(400, 540, 120, 9, 550);
+    static Resources remaining = new Resources(400, 540, 120, 9, 550);
 
     public static void main(String[] args) {
         String answer=" ";
@@ -22,13 +22,19 @@ public class CoffeeMachine {
             answer = scn.nextLine();
             //System.out.println(answer);
         }
-        switch (answer){
-            case "buy" : f_buy(); break;
-            case "fill" : f_fill(); break;
-            case "take" : f_take(); break;
+        switch (answer) {
+            case "buy" -> f_buy();
+            case "fill" -> f_fill();
+            case "take" -> f_take();
         }
 
+    }
+    public static void f_take()
+    {
+        System.out.println("I gave you " + remaining.getMoney());
+        remaining.setMoney((-1) * remaining.getMoney());
 
+        remaining.remaining_print();
     }
     public static void f_fill()
     {
@@ -48,78 +54,71 @@ public class CoffeeMachine {
     }
     public static void f_buy()
     {
-        Integer choice_coffee=0;
+        int choice_coffee = 0;
 
-        while ( choice_coffee<1 && choice_coffee > 3){
+        while ( choice_coffee < 1 || choice_coffee > 3){
             System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:");
             choice_coffee = scn.nextInt();
             //System.out.println(answer);
         }
         f_do_coffee(menu_coffee[choice_coffee-1]);
     }
-    public static void f_take()
-    {
-        System.out.println("I gave you " + remaining.getMoney() + "\n");
-        remaining.setMoney((-1) * remaining.getMoney());
 
-        remaining.remaining_print();
-    }
     public static void f_do_coffee(String coffee_type) {
-        Resourсes espresso = new Resourсes(250, 0, 16, 1, 4);
-        Resourсes latte = new Resourсes(350, 75, 20, 1, 7);
-        Resourсes cappuccino = new Resourсes(200, 100, 12, 1, 6);
-        Resourсes coffee = new Resourсes();
+        Resources espresso = new Resources(250, 0, 16, 1, 4);
+        Resources latte = new Resources(350, 75, 20, 1, 7);
+        Resources cappuccino = new Resources(200, 100, 12, 1, 6);
+        Resources coffee = new Resources();
 
-        boolean rezult = true;
-
-
-        Integer water = 0;
-        Integer milk = 0;
-        Integer beans = 0;
-        Integer money = 0;
+        boolean rez = true;
 
         if (remaining.getCups()<1){
-            rezult = false;
+            rez = false;
             System.out.println("Sorry, not enough cups!");
         }
         else {
 
             switch (coffee_type) {
-                case "espresso":
-                    if (remaining.getWater() - 250 < 0) {
-                        rezult = false;
-                        System.out.println("Sorry, not enough water!");
-                    } else if (remaining.getBeans() - 16 < 0) {
-                        rezult = false;
-                        System.out.println("Sorry, not enough coffee beans!");
-                    }
-                    break;
-                case "latte":
+                case "espresso" -> coffee = espresso;
+                case "latte" -> coffee = latte;
+                case "cappuccino" -> coffee = cappuccino;
+            }
 
-                    break;
-                case "cappuccino":
-
-                    break;
+            if (remaining.getWater() - coffee.getWater() < 0) {
+                rez = false;
+                System.out.println("Sorry, not enough water!");
+            } else if (remaining.getBeans() - coffee.getBeans() < 0) {
+                rez = false;
+                System.out.println("Sorry, not enough coffee beans!");
+            } else if (remaining.getMilk() - coffee.getMilk() < 0 ) {
+                rez = false;
+                System.out.println("Sorry, not enough milk!");
             }
         }
 
-        if (rezult==true)
+        if (rez) {
             System.out.println("I have enough resources, making you a coffee!");
-
+            remaining.setWater((-1) * coffee.getWater());
+            remaining.setMilk((-1) * coffee.getMilk());
+            remaining.setBeans((-1) * coffee.getBeans());
+            remaining.setCups(-1);
+            remaining.setMoney(coffee.getMoney());
+        }
+        remaining.remaining_print();
     }
 
 }
-class Resourсes {
+class Resources {
     private Integer water; // = 400;
     private Integer milk; // = 540;
     private Integer beans; // = 120;
     private Integer cups; // = 9;
     private Integer money; // = 550;
 
-    public Resourсes(){
+    public Resources(){
 
     }
-    public Resourсes(Integer water, Integer milk, Integer beans, Integer cups, Integer money) {
+    public Resources(Integer water, Integer milk, Integer beans, Integer cups, Integer money) {
         this.water = water;
         this.milk = milk;
         this.beans = beans;
@@ -157,7 +156,7 @@ class Resourсes {
         this.money += money;
     }
     public void remaining_print() {
-        System.out.println("The coffee machine has:");
+        System.out.println("\nThe coffee machine has:");
         System.out.println(getWater() + " of water");
         System.out.println(getMilk() + " of milk");
         System.out.println(getBeans() + " of coffee beans");
