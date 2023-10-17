@@ -5,29 +5,31 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class CoffeeMachine {
-    public static Scanner scn = new Scanner(System.in);
-    static String[] menu_main = {"buy", "fill", "take"};
-    static String[] menu_coffee = {"espresso", "latte", "cappuccino"};
+
+    static String[] menu_main = {"buy", "fill", "take", "remaining", "exit"};
+    static String[] menu_coffee = {"espresso", "latte", "cappuccino", "back"};
     static Resources remaining = new Resources(400, 540, 120, 9, 550);
 
     public static void main(String[] args) {
-        String answer=" ";
-
-
-        remaining.remaining_print();
+        String answer;
+        boolean on_exit = false;
         Set<String> menu_main_set = Arrays.stream(menu_main).collect(Collectors.toSet());
+        Scanner scn = new Scanner(System.in);
 
-        while ( !menu_main_set.contains(answer)){
-            System.out.println("Write action (buy, fill, take):");
-            answer = scn.nextLine();
-            //System.out.println(answer);
+        while (!on_exit){
+            answer = " ";
+            while ( !menu_main_set.contains(answer)){
+                System.out.println("Write action (buy, fill, take, remaining, exit):");
+                answer = scn.nextLine();
+            }
+            switch (answer) {
+                case "buy" -> f_buy();
+                case "fill" -> f_fill();
+                case "take" -> f_take();
+                case "remaining" -> remaining.remaining_print();
+                case "exit" -> on_exit = true;
+            }
         }
-        switch (answer) {
-            case "buy" -> f_buy();
-            case "fill" -> f_fill();
-            case "take" -> f_take();
-        }
-
     }
     public static void f_take()
     {
@@ -38,6 +40,7 @@ public class CoffeeMachine {
     }
     public static void f_fill()
     {
+        Scanner scn = new Scanner(System.in);
         System.out.println("Write how many ml of water you want to add:");
         remaining.setWater(scn.nextInt());
 
@@ -55,11 +58,11 @@ public class CoffeeMachine {
     public static void f_buy()
     {
         int choice_coffee = 0;
+        Scanner scn = new Scanner(System.in);
 
-        while ( choice_coffee < 1 || choice_coffee > 3){
-            System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:");
+        while ( choice_coffee < 1 || choice_coffee > 4){
+            System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, 4 - back to main menu:");
             choice_coffee = scn.nextInt();
-            //System.out.println(answer);
         }
         f_do_coffee(menu_coffee[choice_coffee-1]);
     }
@@ -71,7 +74,9 @@ public class CoffeeMachine {
         Resources coffee = new Resources();
 
         boolean rez = true;
-
+        if (coffee_type == "back"){
+            return;
+        }
         if (remaining.getCups()<1){
             rez = false;
             System.out.println("Sorry, not enough cups!");
@@ -161,6 +166,6 @@ class Resources {
         System.out.println(getMilk() + " of milk");
         System.out.println(getBeans() + " of coffee beans");
         System.out.println(getCups() + " of disposable cups");
-        System.out.println(getMoney() + " of money");
+        System.out.println(getMoney() + " of money\n");
     }
 }
