@@ -5,16 +5,10 @@ import java.util.Scanner;
 public class TicTacToe {
     public static void main (String[] args) {
         Scanner scn = new Scanner(System.in);
-        String s = "";
+        String s;
         Tic tic = new Tic();
 
-        while (!(s.length() == 9 && (s.contains("X") || s.contains("O") || s.contains("_")))) {
-            System.out.print("Enter cells (like: O_OXXO_XX): ");
-            s = scn.nextLine();
-        }
-        tic.setField(new StringBuilder(s));
-
-        if (tic.getState().equals("Game not finished")) {
+        while (tic.getState().equals("Game not finished")) {
             do {
                 System.out.print("Enter the coordinates (like: 1 2): ");
                 s = scn.nextLine();
@@ -27,23 +21,23 @@ public class TicTacToe {
 
 class Tic{
     final String[] field_coord = {"1 1", "1 2", "1 3", "2 1", "2 2", "2 3", "3 1", "3 2", "3 3"};
-    private String state;
+    private String state = "Game not finished";
     private StringBuilder field = new StringBuilder();
-    private char gamer;
-    private boolean coord_ok;
+    private char gamer = 'X';
+    private boolean coord_ok = false;
 
     public Tic(){
-        this.gamer = 'X';
-        this.coord_ok = false;
+    }
+    {
+        field.append(" ".repeat(9));
+        field_print(field);
     }
     public String getState() {
         return state;
     }
-    public void setField(StringBuilder field) {
-        this.field = field;
-        field_print(field);
+    public boolean is_coord_ok(){
+        return coord_ok;
     }
-
     public void field_change(StringBuilder xy){
         int x, y, index;
 
@@ -53,7 +47,7 @@ class Tic{
             y = Integer.parseInt(xy.substring(2, 3));
             index = 3 * (x - 1) + y - 1;
 
-            if (field.charAt(index) == '_') {
+            if (field.charAt(index) == ' '){
                 field.setCharAt(index, gamer);
                 coord_ok = true;
                 gamer = gamer == 'X' ? 'O' : 'X';
@@ -81,17 +75,16 @@ class Tic{
                 "---------" );
         f_state(s.toString());
     }
-    private String f_state(String s){
+    private void f_state(String s){
         if ( Math.abs((f_count_xo(s,'X') - f_count_xo(s,'O') )) > 1 ) state="Impossible";
         else if (is_xo_win(s,'X') && is_xo_win(s,'O')) state = "Impossible";
         else if (is_xo_win(s,'X'))   state = "X wins";
         else if (is_xo_win(s,'O'))   state = "O wins";
-        else if (s.contains("_"))  state = "Game not finished";
+        else if (s.contains(" "))  state = "Game not finished";
         else state = "Draw";
-        return state;
     }
     private int f_count_xo(String s, char c){
-        char [] sc;
+        char[] sc;
         sc = s.toCharArray();
         int count=0;
 
@@ -100,21 +93,18 @@ class Tic{
         }
         return count;
     }
-    public boolean is_coord_ok(){
-        return coord_ok;
-    }
     private boolean is_xo_win(String s, char xo){
-        char [] sc;
+        char[] sc;
         sc = s.toCharArray();
 
-        if((sc[0]==xo && sc [1]==xo && sc[2]==xo) ||
-           (sc[3]==xo && sc [4]==xo && sc[5]==xo) ||
-           (sc[6]==xo && sc [7]==xo && sc[8]==xo) ||
-           (sc[0]==xo && sc [3]==xo && sc[6]==xo) ||
-           (sc[1]==xo && sc [4]==xo && sc[7]==xo) ||
-           (sc[2]==xo && sc [5]==xo && sc[8]==xo) ||
-           (sc[2]==xo && sc [4]==xo && sc[6]==xo) ||
-           (sc[0]==xo && sc [4]==xo && sc[8]==xo) ) {
+        if((sc[0]==xo && sc[1]==xo && sc[2]==xo) ||
+           (sc[3]==xo && sc[4]==xo && sc[5]==xo) ||
+           (sc[6]==xo && sc[7]==xo && sc[8]==xo) ||
+           (sc[0]==xo && sc[3]==xo && sc[6]==xo) ||
+           (sc[1]==xo && sc[4]==xo && sc[7]==xo) ||
+           (sc[2]==xo && sc[5]==xo && sc[8]==xo) ||
+           (sc[2]==xo && sc[4]==xo && sc[6]==xo) ||
+           (sc[0]==xo && sc[4]==xo && sc[8]==xo) ) {
             return true;
         }
         return false;
