@@ -66,7 +66,8 @@ public class Matrix {
     }
     public void printMatrix()
     {
-        for(int i = 0; i < this.n; i++)
+        System.out.println("The result is:");
+    for(int i = 0; i < this.n; i++)
         {
             for(int j = 0; j < this.m; j++)
             {
@@ -75,11 +76,25 @@ public class Matrix {
             System.out.println();
         }
     }
+    public static Matrix multyСonst(Matrix m, int num){
+        int hor, ver;
+        hor = m.getCountRows();
+        ver = m.getCountColumns();
+
+        for(int i = 0; i < hor; i++){
+            for(int j = 0; j < ver; j++)           {
+                m.setElement(i, j, m.getElement(i, j) * num);
+            }
+        }
+
+        return m;
+    }
+
     public static Matrix add(Matrix first, Matrix second){
-        Action action = Action.ADD;
+        //Action action = Action.ADD;
         int hor, ver;
 
-        if(!IsSizeMatrixOk(action, first, second))
+        if(!IsSizeMatrixOk(Action.ADD, first, second))
         {
             return null;
         }
@@ -96,6 +111,29 @@ public class Matrix {
             return tmpMatrix;
         }
     }
+    public static Matrix multiply (Matrix first, Matrix second) {
+        //Action action = Action.MULTI;
+        //if(first.getCountRows() != second.getCountColumns())
+        if(!IsSizeMatrixOk(Action.MULTI, first, second))
+            return null;
+        else {
+            Matrix tmpMatrix;
+            int n = first.getCountColumns();
+            int m = second.getCountRows();
+            int o = second.getCountColumns();
+            int[][] tmpArr = new int[n][m];
+            for(int i = 0; i < n; i++){
+                for(int j = 0; j < m; j++){
+                    for (int k = 0; k < o; k++) {
+                        tmpArr[i][j] += first.getElement(i, k) * second.getElement(k, j);
+                    }
+                }
+            }
+            tmpMatrix = new Matrix(tmpArr);
+            return tmpMatrix;
+        }
+    }
+
     public static boolean IsSizeMatrixOk ( Action act, Matrix first, Matrix second){
         boolean rez = true;
         switch (act) {
@@ -106,9 +144,12 @@ public class Matrix {
                     rez = false;
                 }; break;
             }
-            case MULTI->{
-
-                break;
+            case MULTI-> {
+                if (first.getCountRows() != second.getCountColumns()) {
+                    System.out.println("ERROR: NotEqualLengthsOfMatrix");
+                    rez = false;
+                    break;
+                }
             }
         }
         return rez;
