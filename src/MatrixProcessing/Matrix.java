@@ -125,8 +125,7 @@ public class Matrix {
         }
     }
     public static Matrix multiply (Matrix first, Matrix second) {
-        //Action action = Action.MULTI;
-        //if(first.getCountRows() != second.getCountColumns())
+
         if(!IsSizeMatrixOk(Action.MULTI, first, second))
             return null;
         else {
@@ -225,6 +224,32 @@ public class Matrix {
             l *= (-1);
         }
         return ans;
+    }
+    private static Matrix allied (Matrix mx){
+        int row = mx.getCountRows();
+        int col = mx.getCountColumns();
+        Matrix tmpMatrix = new Matrix (row, col);
+
+        int N = mx.length;
+        int[] adjA ;
+
+        for (int i = 0; i < N; i++)
+        { adjA[i] = 0;
+            for (int j = 0; j < N; j++)
+            { var B = [], sign = ((i+j)%2==0) ? 1 : -1;
+                for (var m = 0; m < j; m++)
+                { B[m] = [];
+                    for (var n = 0; n < i; n++)   B[m][n] = [m][n];
+                    for (var n = i+1; n < N; n++) B[m][n-1] = A[m][n];
+                }
+                for (var m = j+1; m < N; m++)
+                { B[m-1] = [];
+                    for (var n = 0; n < i; n++)   B[m-1][n] = A[m][n];
+                    for (var n = i+1; n < N; n++) B[m-1][n-1] = A[m][n];
+                }
+                adjA[ i ][j] = sign*Determinant(B);   // Функцию Determinant см. выше
+            }
+        return tmpMatrix;
     }
     public static boolean IsSizeMatrixOk ( Action act, Matrix first, Matrix second){
         boolean rez = true;
