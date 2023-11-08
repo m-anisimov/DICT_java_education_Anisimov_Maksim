@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class Matrix {
     private int n, m;
-    //private int[][] mainMatrix;
     private double[][] mainMatrix;
     enum Action {ADD, MULTI, CONST, TRANS}
     public Scanner scn = new Scanner(System.in);
@@ -12,23 +11,19 @@ public class Matrix {
     {
         this.n = n;
         this.m = m;
-        //this.mainMatrix = new int[this.n][this.m];
         this.mainMatrix = new double[this.n][this.m];
     }
     public Matrix(double [][] paramMatrix)
-    //public Matrix(int [][] paramMatrix)
     {
         this.n = paramMatrix.length;
         this.m = paramMatrix[0].length;
         this.mainMatrix = paramMatrix;
     }
     public double getElement(int n, int m)
-    //public int getElement(int n, int m)
     {
         return this.mainMatrix[n][m];
     }
     public void setElement(int n, int m, double value)
-    //public void setElement(int n, int m, int value)
     {
         this.mainMatrix[n][m] = value;
     }
@@ -71,7 +66,6 @@ public class Matrix {
             s.append(scn.nextLine());
             rowAdd(i, s);
         }
-        //printMatrix();
     }
     public void printMatrix()
     {
@@ -104,7 +98,6 @@ public class Matrix {
     }
 
     public static Matrix add(Matrix first, Matrix second){
-        //Action action = Action.ADD;
         int hor, ver;
 
         if(!IsSizeMatrixOk(Action.ADD, first, second))
@@ -133,7 +126,6 @@ public class Matrix {
             int n = first.getCountColumns();
             int m = second.getCountRows();
             int o = second.getCountColumns();
-            //int[][] tmpArr = new int[n][m];
             double[][] tmpArr = new double[n][m];
 
             for(int i = 0; i < n; i++){
@@ -225,33 +217,61 @@ public class Matrix {
         }
         return ans;
     }
-    private static Matrix allied (Matrix mx){
-        int row = mx.getCountRows();
-        int col = mx.getCountColumns();
+    private static Matrix allied (Matrix A){
+        int row = A.getCountRows();
+        int col = A.getCountColumns();
         Matrix tmpMatrix = new Matrix (row, col);
+        int sign;
+        int N = row;
 
-        int N = mx.length;
-        int[] adjA ;
+        Matrix adjA = new Matrix (row, col);
+        Matrix B = new Matrix (row, col);
 
-        for (int i = 0; i < N; i++)
-        { adjA[i] = 0;
-            for (int j = 0; j < N; j++)
-            { var B = [], sign = ((i+j)%2==0) ? 1 : -1;
-                for (var m = 0; m < j; m++)
-                { B[m] = [];
-                    for (var n = 0; n < i; n++)   B[m][n] = [m][n];
-                    for (var n = i+1; n < N; n++) B[m][n-1] = A[m][n];
+        for (int i = 0; i < N; i++) {
+
+            for (int j = 0; j < N; j++) {
+                //int[] B;
+                sign = ((i + j) % 2 == 0) ? 1 : -1;
+
+                for (var m = 0; m < j; m++) {
+                    for (int n = 0; n < i; n++)   B.setElement(m, n, A.getElement( m, n));
+                    for (int n = i + 1; n < N; n++) B.setElement(m, (n-1), A.getElement( m, n));
                 }
-                for (var m = j+1; m < N; m++)
-                { B[m-1] = [];
-                    for (var n = 0; n < i; n++)   B[m-1][n] = A[m][n];
-                    for (var n = i+1; n < N; n++) B[m-1][n-1] = A[m][n];
+
+                for (var m = j + 1; m < N; m++) {
+                    //B[m - 1] = [];
+                    for (var n = 0; n < i; n++) B.setElement((m-1), n, A.getElement( m, n));
+                    for (var n = i + 1; n < N; n++) B.setElement((m-1), (n-1), A.getElement( m, n));
                 }
-                adjA[ i ][j] = sign*Determinant(B);   // Функцию Determinant см. выше
+
+                adjA.setElement(i, j, (sign * det(B)));
             }
+        }
         return tmpMatrix;
     }
-    public static boolean IsSizeMatrixOk ( Action act, Matrix first, Matrix second){
+
+    public static Matrix InverseMatrix(Matrix A)
+    {
+        double det = det(A);
+        if (det == 0){
+            System.out.println("This matrix doesn't have an inverse.");
+            return null;
+        }
+
+        int row = A.getCountRows();
+        int col = A.getCountColumns();
+        if (row != col){
+            System.out.println("This matrix must be square.");
+            return null;
+        }
+
+        Matrix Aa = allied( A );
+        Aa.printMatrix();
+        Matrix Ainv =  multyСonst(Aa, 1/det(A));
+
+        return Ainv;
+    }
+    public static boolean IsSizeMatrixOk( Action act, Matrix first, Matrix second){
         boolean rez = true;
         switch (act) {
             case ADD ->{

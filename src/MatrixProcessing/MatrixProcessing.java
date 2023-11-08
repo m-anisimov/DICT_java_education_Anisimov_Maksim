@@ -23,7 +23,7 @@ class State {
     private String user_choice;
     private String state;
     private final String[] menu_action = {"1. Add matrices", "2. Multiply matrix by a constant",
-            "3. Multiply matrices", "4. Transpose matrix", "5. Calculate a determinant", "0. Exit"};
+            "3. Multiply matrices", "4. Transpose matrix", "5. Calculate a determinant", "6. Inverse matrix", "0. Exit"};
     private final String[] menu_trans = {"1. Main diagonal","2. Side diagonal",
             "3. Vertical line","4. Horizontal line "};
 
@@ -59,6 +59,7 @@ class State {
                 case '3' -> f_add_multi(Matrix.Action.MULTI);
                 case '4' -> state = "trans";
                 case '5' -> f_det();
+                case '6' -> f_inverse();
                 case '0' -> state = "exit";
             }
         } else if (state.equals("trans")){
@@ -89,7 +90,6 @@ class State {
         System.out.println("Enter multiplier:");
         user_str.append(scn.nextLine());
 
-        //Matrix matrix_rez = Matrix.multyСonst (matrix, Integer.parseInt(user_str.substring( 0, user_str.length())));
         Matrix matrix_rez = Matrix.multyСonst (matrix, Double.parseDouble(user_str.substring( 0, user_str.length())));
         if (matrix_rez!=null) {
             matrix_rez.printMatrix();
@@ -115,6 +115,17 @@ class State {
         det = mx.det(mx);
         System.out.println("The result is:\n" + det);
         return  det;
+    }
+    private void f_inverse(){
+        Matrix mx = preambleMatrixInput("");
+        if (mx == null)
+            return;
+
+        Matrix matrix_rez = Matrix.InverseMatrix(mx);
+
+        if (matrix_rez != null) {
+        matrix_rez.printMatrix();
+        }
     }
     private void f_trans(int trans_type){
         Matrix matrix = preambleMatrixInput("");
