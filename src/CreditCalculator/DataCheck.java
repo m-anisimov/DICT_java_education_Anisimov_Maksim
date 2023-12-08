@@ -4,41 +4,34 @@ public class DataCheck {
     private String type, principal, periods, interest, payment;
     private Double dPrincipal, dPeriods, dInterest, dPayment;
 
-    enum Flag {EMPTY, DIFF_PAY, ANN_PAY, PRINC, PERIOD};
+    public enum Flag {EMPTY, DIFF_PAY, ANN_PAY, PRINC, PERIOD};
     private Flag method;
     public DataCheck() {
         this.type = System.getProperty("type");
-        this.principal = System.getProperty("principal"); // P
-        this.periods = System.getProperty("periods"); // n
-        this.interest = System.getProperty("interest"); // for i calc
-        this.payment = System.getProperty("payment"); // A
+        this.principal = System.getProperty("principal");
+        this.periods = System.getProperty("periods");
+        this.interest = System.getProperty("interest");
+        this.payment = System.getProperty("payment");
         this.method = Flag.EMPTY;
     }
-
     public Flag getMethod() {
-        return method;
+        return this.method;
     }
-
     public Double getdInterest() {
         return dInterest;
     }
-
     public Double getdPeriods() {
         return dPeriods;
     }
-
     public Double getdPrincipal() {
         return dPrincipal;
     }
-
     public Double getdPayment() {
         return dPayment;
     }
-
     public String getType() {
         return type;
     }
-
     public boolean isArgsCorrect(){
         int sum = 0;
 
@@ -88,7 +81,6 @@ public class DataCheck {
                 }
             }
         }
-
         return true;
     }
     private double parseDoublePositive(String s){

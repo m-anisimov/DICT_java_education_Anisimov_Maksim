@@ -1,38 +1,51 @@
 package CreditCalculator;
 
 public class CalculatorLogic {
-    private String type;
-    private String principal;
-    private String periods;
-    private String interest;
-    private String payment;
-
-    public Integer i;
-    public CalculatorLogic(String type, String principal, String periods, String interest, String payment){
-        this.type = type;
-        this.principal = principal;
-        this.periods = periods;
-        this.interest = interest;
-        this.payment = payment;
+    public CalculatorLogic(){
     }
-    public void dataAnalyze(String type, String principal, String periods, String interest, String payment){
-        if (type.equals("diff"))
-            paymentCalcDiff();
-        else
-            paymentCalcAnnuity();
+    public void calcDiffPay(double p, double i, double n){
+        double sumPay = 0.0;
+        double dm = 0.0;
 
+        i = i / (12 * 100);
+        for (int m = 1; m <= n; m++){
+            dm = Math.ceil( p / n + i * (p - p * (m - 1) / n) );
+            sumPay += dm;
+            System.out.println("Month " + m +": payment is " + (int)dm);
+        }
+        System.out.println("Overpayment = " + (int)(sumPay - p));
     }
-    public int paymentCalcDiff(){
-        // 𝐷𝑚 = 𝑃/𝑛 + 𝑖 ∗ (𝑃 − 𝑃 ∗ (𝑚 − 1)/𝑛 )
-        // 𝐷𝑚 - m-й диференційований платіж;  𝑚  - поточний місяць погашення;
-        // 𝑃  - основна сума кредиту; 𝑖  - номінальна процентна ставка;  𝑛  - кількість платежів;
+    public void calcAnnuityPay(double p, double i, double n){
+        double mp;
 
-        int Dm=0;
-
-        //for (int k=1; k<n)
-        return Dm;
+        i = i / (12 * 100);
+        mp = Math.ceil( p * i * Math.pow(1 + i, n) / (Math.pow(1 + i, n) - 1) );
+        System.out.println("Your monthly payment = " + (int)mp + "!");
     }
-    public void paymentCalcAnnuity(){
-        ;
+    public void calcPrincipal(double mp, double i, double n){
+        double p;
+
+        i = i / (12 * 100);
+        p = Math.floor( mp / (i * Math.pow(1 + i, n)/(Math.pow(1 + i, n)-1)) );
+        System.out.println("Your loan principal = " + (int)p + "!");
+    }
+    public void calcPeriod(double p, double mp, double i){
+        double n;
+        int year, month;
+        String s;
+
+        i = i / (12 * 100);
+        n = Math.ceil( Math.log(mp / (mp - i * p)) / Math.log(1 + i) );
+        year = (int) (n / 12);
+        month = (int) (n - year * 12);
+        s = "It will take ";
+        if (year > 0){
+            s += year + " years ";
+            s = month > 0 ? s+= "and " : s;
+        }
+        s = month > 0 ? s += month + " months " : s;
+        s += "to repay this loan!";
+
+        System.out.println(s);
     }
 }
